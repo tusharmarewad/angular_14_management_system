@@ -1,4 +1,10 @@
 <div class="container">
+  <nav class="navbar">
+    <ul>
+      <li><a routerLink="/system-management" routerLinkActive="active">Task 1</a></li>
+      <li><a routerLink="/dynamic" routerLinkActive="active">Task 2</a></li>
+    </ul>
+  </nav>
   <div class="header">
     <h1>User Management</h1>
   </div>
@@ -57,6 +63,12 @@
         <mat-option value="email">Email</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <!-- Sort Order Buttons -->
+    <div fxFlex="100" fxFlex.sm="48" fxLayout="row" fxLayoutGap="10px">
+      <button mat-raised-button color="primary" (click)="changeSortOrder('asc')">Ascending</button>
+      <button mat-raised-button color="primary" (click)="changeSortOrder('desc')">Descending</button>
+    </div>
 
     <!-- Search Input -->
     <mat-form-field appearance="fill" fxFlex="100" fxFlex.sm="48">

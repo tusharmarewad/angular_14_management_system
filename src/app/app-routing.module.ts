@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { DyanamicFormComponent } from './dyanamic-form/dyanamic-form.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'Home', pathMatch: 'full' },
-  { path: 'Home', component:UserManagementComponent },
-  { path: '**', redirectTo: 'Home' }, // Wildcard route for a 404 page
+
+  { path: '', redirectTo: 'system-management', pathMatch: 'full' },
+  { path: 'system-management', component: UserManagementComponent },
+  { path: 'dynamic', component: DyanamicFormComponent },
 ];
 
 @NgModule({

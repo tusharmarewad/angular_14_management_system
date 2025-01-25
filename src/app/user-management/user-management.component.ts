@@ -22,6 +22,7 @@ export class UserManagementComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email', 'role', 'actions'];
   dataSource: MatTableDataSource<User>;
   sortBy: string = ''; // Holds the selected filter
+  sortOrder: string = 'asc'; // Holds the selected sort order (asc/desc)
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -117,11 +118,24 @@ export class UserManagementComponent implements OnInit {
 
   sortUsers() {
     if (this.sortBy === 'name') {
-      this.users.sort((a, b) => a.name.localeCompare(b.name));
+      this.users.sort((a, b) => {
+        return this.sortOrder === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      });
     } else if (this.sortBy === 'email') {
-      this.users.sort((a, b) => a.email.localeCompare(b.email));
+      this.users.sort((a, b) => {
+        return this.sortOrder === 'asc'
+          ? a.email.localeCompare(b.email)
+          : b.email.localeCompare(a.email);
+      });
     }
     this.saveUsers(); // Persist sorted data
+  }
+
+  changeSortOrder(order: string) {
+    this.sortOrder = order;
+    this.sortUsers();
   }
 
   onSubmit() {

@@ -1,0 +1,159 @@
+<nav class="navbar">
+  <ul>
+    <li><a routerLink="/system-management" routerLinkActive="active">Task 1</a></li>
+    <li><a routerLink="/dynamic" routerLinkActive="active">Task 2</a></li>
+  </ul>
+</nav>
+
+
+<mat-card>
+    <mat-card-title>Dynamic Form Builder</mat-card-title>
+    <mat-card-content>
+      <form>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Field Type</mat-label>
+          <mat-select [(ngModel)]="newField.type" name="fieldType">
+            <mat-option value="text">Text Input</mat-option>
+            <mat-option value="textarea">Textarea</mat-option>
+            <mat-option value="dropdown">Dropdown</mat-option>
+            <mat-option value="checkbox">Checkbox</mat-option>
+            <mat-option value="radio">Radio Button</mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Label</mat-label>
+          <input matInput [(ngModel)]="newField.label" name="label" />
+        </mat-form-field>
+  
+        <mat-form-field *ngIf="newField.type === 'text' || newField.type === 'textarea'" appearance="fill" class="full-width">
+          <mat-label>Placeholder</mat-label>
+          <input matInput [(ngModel)]="newField.placeholder" name="placeholder" />
+        </mat-form-field>
+  
+        <mat-form-field *ngIf="newField.type === 'dropdown' || newField.type === 'radio'" appearance="fill" class="full-width">
+          <mat-label>Options (comma-separated)</mat-label>
+          <input matInput [(ngModel)]="optionsInput" name="options" />
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" (click)="addField()">Add Field</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+  
+  <mat-divider></mat-divider>
+  
+  <mat-card>
+    <mat-card-title>Preview Form</mat-card-title>
+    <mat-card-content>
+      <form #previewForm="ngForm" (ngSubmit)="onSubmit(previewForm)">
+        <div *ngFor="let field of formFields; let i = index" class="mb-3">
+          <ng-container [ngSwitch]="field.type">
+            <!-- Text Field -->
+            <mat-form-field *ngSwitchCase="'text'" appearance="fill" class="full-width">
+              <mat-label>{{ field.label }}</mat-label>
+              <input
+                matInput
+                [(ngModel)]="formData[field.id]"
+                [name]="'field_' + field.id + '_' + i"
+                [placeholder]="field.placeholder || ''"
+                [required]="field.validations.required"
+                #inputField="ngModel"
+              />
+              <mat-error *ngIf="inputField.invalid && inputField.touched">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+  
+            <!-- Textarea -->
+            <mat-form-field *ngSwitchCase="'textarea'" appearance="fill" class="full-width">
+              <mat-label>{{ field.label }}</mat-label>
+              <textarea
+                matInput
+                [(ngModel)]="formData[field.id]"
+                [name]="'field_' + field.id + '_' + i"
+                [placeholder]="field.placeholder || ''"
+                [required]="field.validations.required"
+                #textareaField="ngModel"
+              ></textarea>
+              <mat-error *ngIf="textareaField.invalid && textareaField.touched">
+                {{ field.label }} is required.
+              </mat-error>
+            </mat-form-field>
+  
+            <!-- Dropdown -->
+            <div *ngSwitchCase="'dropdown'" class="full-width">
+              <mat-form-field appearance="fill">
+                <mat-label>{{ field.label }}</mat-label>
+                <mat-select
+                  [(ngModel)]="formData[field.id]"
+                  [name]="'field_' + field.id + '_' + i"
+                  [required]="field.validations.required"
+                  #dropdownField="ngModel"
+                >
+                  <mat-option *ngFor="let option of field.options" [value]="option">{{ option }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="dropdownField.invalid && dropdownField.touched">
+                  {{ field.label }} is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+  
+    <!-- Checkbox -->
+<div *ngSwitchCase="'checkbox'" class="full-width">
+  <label>
+    <input
+      type="checkbox"
+      [(ngModel)]="formData[field.id]"
+      [name]="'field_' + field.id + '_' + i"
+      [required]="field.validations.required"
+      #checkboxField="ngModel"
+    />
+    {{ field.label }}
+  </label>
+  <div *ngIf="checkboxField.invalid && checkboxField.touched" class="error">
+    {{ field.label }} is required.
+  </div>
+</div>
+
+
+
+
+  
+            <!-- Radio Buttons -->
+            <div *ngSwitchCase="'radio'" class="full-width">
+              <label>{{ field.label }}</label>
+              <mat-radio-group
+                [(ngModel)]="formData[field.id]"
+                [name]="'field_' + field.id + '_' + i"
+                [required]="field.validations.required"
+                #radioGroupField="ngModel"
+              >
+                <mat-radio-button *ngFor="let option of field.options" [value]="option">{{ option }}</mat-radio-button>
+              </mat-radio-group>
+              <mat-error *ngIf="radioGroupField.invalid && radioGroupField.touched">
+                {{ field.label }} is required.
+              </mat-error>
+            </div>
+          </ng-container>
+  
+          <!-- Delete Field -->
+          <button mat-icon-button color="warn" (click)="removeField(field.id)" type="button">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+  
+        <!-- Submit Button -->
+        <button mat-raised-button color="accent" type="submit" [disabled]="!previewForm.valid">
+          Submit form
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
+  
+  
+  
+  
+  

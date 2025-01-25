@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { AppRoutingModule } from './app-routing.module'; // Routing module
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Forms modules
 
+
 // Angular Material Modules
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -15,16 +16,21 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDividerModule } from '@angular/material/divider';
+
 // Components
 import { AppComponent } from './app.component';
 
 import { UserManagementComponent } from './user-management/user-management.component';
+import { DyanamicFormComponent } from './dyanamic-form/dyanamic-form.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     UserManagementComponent,
+    DyanamicFormComponent,
     
   ],
   imports: [
@@ -43,7 +49,9 @@ import { UserManagementComponent } from './user-management/user-management.compo
     MatFormFieldModule,   // For form fields
     MatDialogModule,      // For dialog boxes
     MatSelectModule,   // For select dropdowns
-    MatIconModule   
+    MatIconModule,
+    MatRadioModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [AppComponent],
