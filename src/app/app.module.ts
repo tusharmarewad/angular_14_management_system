@@ -18,6 +18,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // Components
 import { AppComponent } from './app.component';
@@ -51,7 +52,8 @@ import { DyanamicFormComponent } from './dyanamic-form/dyanamic-form.component';
     MatSelectModule,   // For select dropdowns
     MatIconModule,
     MatRadioModule,
-    MatDividerModule
+    MatDividerModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent],

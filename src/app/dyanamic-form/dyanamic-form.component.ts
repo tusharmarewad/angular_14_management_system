@@ -1,17 +1,22 @@
 import { Component } from '@angular/core';
 
+export interface CheckboxOption {
+  name: string;
+  selected: boolean;
+}
+
 export interface FormField {
   id: string;
   type: string;
   label: string;
-  placeholder: string; // Mandatory
+  placeholder?: string; // Mandatory for text and textarea
   options?: string[];
+  checkboxOptions?: CheckboxOption[]; // Specific for checkbox
   validations: {
     required: boolean;
   };
   error?: string;
 }
-
 
 @Component({
   selector: 'app-dyanamic-form',
@@ -25,15 +30,13 @@ export class DyanamicFormComponent {
     id: '',
     type: 'text',
     label: '',
-    placeholder: '', // Initialize as an empty string
-    options: [],
     validations: {
       required: true,
     },
-    error: '',
   };
-  
+
   optionsInput = '';
+  checkboxOptionsInput = '';
 
   constructor() {}
 
@@ -42,66 +45,73 @@ export class DyanamicFormComponent {
       alert('Label is required for a field!');
       return;
     }
-  
-    // Only validate placeholder for 'text' or 'textarea' field types
-    if (
-      (this.newField.type === 'text' || this.newField.type === 'textarea') &&
-      (!this.newField.placeholder || !this.newField.placeholder.trim())
-    ) {
-      alert('Placeholder is required for a text or textarea field!');
-      return;
-    }
-  
-    // Assign a unique ID to the field
+
     this.newField.id = Date.now().toString();
-  
-    // Process options for dropdown or radio button fields
-    if (this.optionsInput) {
+
+    // If it's a checkbox field, prepare checkboxOptions
+    if (this.newField.type === 'checkbox' && this.checkboxOptionsInput) {
+      this.newField.checkboxOptions = this.checkboxOptionsInput
+        .split(',')
+        .map((opt) => ({ name: opt.trim(), selected: false }));
+    } else if (
+      (this.newField.type === 'dropdown' || this.newField.type === 'radio') &&
+      this.optionsInput
+    ) {
+      // Handle dropdown and radio options
       this.newField.options = this.optionsInput.split(',').map((opt) => opt.trim());
     }
-  
-    // Add the new field to the formFields array
+
     this.formFields.push({ ...this.newField });
-  
-    // Reset the newField object
     this.resetNewField();
   }
-  
 
   resetNewField() {
     this.newField = {
       id: '',
       type: 'text',
       label: '',
-      placeholder: '',
-      options: [],
-      validations: { required: false },
-      error: '',
+      validations: { required: true },
     };
     this.optionsInput = '';
+    this.checkboxOptionsInput = '';
+  }
+
+  removeField(fieldId: string) {
+    this.formFields = this.formFields.filter((field) => field.id !== fieldId);
+    delete this.formData[fieldId];
+  }
+
+  updateCheckboxSelection(fieldId: string, optionName: string) {
+    const field = this.formFields.find((f) => f.id === fieldId);
+    if (field?.checkboxOptions) {
+      const option = field.checkboxOptions.find((opt) => opt.name === optionName);
+      if (option) {
+        option.selected = !option.selected;
+        console.log(`Updated Checkbox State for ${field.label}:`, field.checkboxOptions);
+      }
+    }
   }
 
   onSubmit(previewForm: any) {
     if (previewForm.valid) {
-      // Construct an object with label names and their corresponding values
-      const submittedData = this.formFields.map((field) => ({
-        label: field.label,
-        value: this.formData[field.id] || '',
-      }));
-  
+      const submittedData = this.formFields.map((field) => {
+        if (field.type === 'checkbox') {
+          return {
+            label: field.label,
+            value: field.checkboxOptions,
+          };
+        } else {
+          return {
+            label: field.label,
+            value: this.formData[field.id] || '',
+          };
+        }
+      });
+
       console.log('Form Submitted Successfully:', submittedData);
       alert('Form submitted successfully!');
     } else {
       alert('Please fill out all required fields.');
     }
-  }
-  
-  
-  
-  
-
-  removeField(fieldId: string) {
-    this.formFields = this.formFields.filter((field) => field.id !== fieldId);
-    delete this.formData[fieldId];
   }
 }
